@@ -1,0 +1,16 @@
+.Board {
+  display: flex;
+  padding: 30px;
+}
+
+.game {
+  width: 640px;
+  height: 640px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.game img {
+  width: 80px;
+  height: 80px;
+}
