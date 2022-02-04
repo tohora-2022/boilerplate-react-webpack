@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from 'react'
-import {getGreeting} from '../apiClient'
+import React, { useState, useEffect } from 'react'
+import { getGreeting } from '../apiClient'
 
 const App = () => {
-
   const [greeting, setGreeting] = useState('')
   const [count, setCount] = useState(0)
 
@@ -16,9 +15,9 @@ const App = () => {
 
   return (
     <>
-    {count}
-    <h1>{greeting}</h1>
-    <button onClick={() => setCount(count + 1)}>Click</button>
+      {count}
+      <h1>{greeting}</h1>
+      <button onClick={() => setCount(count + 1)}>Click</button>
     </>
   )
 }
