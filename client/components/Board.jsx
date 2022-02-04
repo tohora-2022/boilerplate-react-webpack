@@ -29,16 +29,17 @@ export default function Board () {
   }
 
   function checkforRowFour () {
-    for (let i = 0; i < (width * (width - 2)); i++) {
+    for (let i = 0; i < (width * width); i++) {
       const rowOfFOur = [i, i + 1, i + 2, i + 3]
       const colorCheck = colorArr[i]
       const skipCheck = []
-      if (i % width === 0) {
+      if (i + 1 % width === 0) {
         skipCheck.push(i - 1)
         skipCheck.push(i - 2)
         skipCheck.push(i - 3)
       }
-      if (skipCheck.includes(i)) continue
+      console.log(skipCheck)
+      if (!skipCheck.includes(i)) continue
 
       if (rowOfFOur.every(item => colorArr[item] === colorCheck)) {
         return rowOfFOur.map(item => colorArr[item] = '')
@@ -47,14 +48,15 @@ export default function Board () {
   }
 
   function checkforRowThree () {
-    for (let i = 0; i < (width * (width - 2)); i++) {
+    for (let i = 0; i < (width * width); i++) {
       const rowOfThree = [i, i + 1, i + 2]
       const colorCheck = colorArr[i]
       const skipCheck = []
-      if (i % width === 0) {
+      if (i + 1 % width === 0) {
         skipCheck.push(i - 1)
         skipCheck.push(i - 2)
       }
+      console.log(skipCheck)
 
       if (skipCheck.includes(i)) continue
 
@@ -94,7 +96,6 @@ export default function Board () {
         {colorArr.map((candy, index) => {
           return <img key={index} style={{ backgroundColor: candy }} alt={candy}/>
         })}
-        {console.log(colorArr)}
       </div>
     </div>
   )
