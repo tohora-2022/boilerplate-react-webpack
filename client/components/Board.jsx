@@ -7,8 +7,6 @@ export default function Board () {
   const candyColors = ['blue', 'red', 'green', 'yellow', 'orange', 'purple']
 
   function checkforColFour () {
-    // const checkMaxI = [22 + width, 22 + (width * 2), 22 + (width * 3)]
-    // console.log(checkMaxI)
     for (let i = 0; i < (width * (width - 3)); i++) {
       const colOfFour = [i, i + width, i + (width * 2), i + (width * 3)]
       const colorCheck = colorArr[i]
@@ -66,8 +64,6 @@ export default function Board () {
       if ((i + 1) % width === 0 || (i + 2) % width === 0) {
         skipCheck.push(i)
       }
-      // console.log(skipCheck)
-
       if (skipCheck.includes(i) === false) {
         if (rowOfThree.every(item => colorArr[item] === colorCheck)) {
           (
@@ -76,6 +72,23 @@ export default function Board () {
             })
           )
         }
+      }
+    }
+  }
+
+  function dropToEmptySpace () {
+    // const firstRow = Array.apply(null, Array(width)).map((x, i) => { return i })
+    for (let i = 0; i < width * (width - 1); i++) {
+      const firstRow = Array.apply(null, Array(width)).map((x, i) => { return i })
+      const checkFirstRow = firstRow.includes(i)
+
+      if (checkFirstRow && colorArr[i] === '') {
+        colorArr[i] = candyColors[Math.floor(Math.random() * candyColors.length)]
+      }
+
+      if ((colorArr[i + width] === '')) {
+        colorArr[i + width] = colorArr[i]
+        colorArr[i] = ''
       }
     }
   }
@@ -99,10 +112,11 @@ export default function Board () {
       checkforColFour()
       checkforRowThree()
       checkforColThree()
+      dropToEmptySpace()
       setColorArr([...colorArr])
-    }, 5000)
+    }, 200)
     return () => clearInterval(timer)
-  }, [checkforColFour, checkforRowFour, checkforRowThree, checkforColThree, colorArr])
+  }, [checkforColFour, checkforRowFour, checkforRowThree, checkforColThree, dropToEmptySpace, colorArr])
 
   return (
     <div className='Board'>
