@@ -7,42 +7,53 @@ export default function Board () {
   const candyColors = ['blue', 'red', 'green', 'yellow', 'orange', 'purple']
 
   function checkforColFour () {
+    // const checkMaxI = [22 + width, 22 + (width * 2), 22 + (width * 3)]
+    // console.log(checkMaxI)
     for (let i = 0; i < (width * (width - 3)); i++) {
-      const colOfFour = [i, i + width, i + width * 2, i + width * 3]
+      const colOfFour = [i, i + width, i + (width * 2), i + (width * 3)]
       const colorCheck = colorArr[i]
 
       if (colOfFour.every(item => colorArr[item] === colorCheck)) {
-        return colOfFour.map(item => colorArr[item] = '')
+        (
+          colOfFour.map(item => {
+            colorArr[item] = ''
+          }))
       }
     }
   }
 
   function checkforColThree () {
     for (let i = 0; i < (width * (width - 2)); i++) {
-      const colOfThree = [i, i + width, i + width * 2]
+      const colOfThree = [i, i + width, i + (width * 2)]
       const colorCheck = colorArr[i]
 
       if (colOfThree.every(item => colorArr[item] === colorCheck)) {
-        return colOfThree.map(item => colorArr[item] = '')
+        (
+          colOfThree.map(item => {
+            colorArr[item] = ''
+          })
+        )
       }
     }
   }
 
   function checkforRowFour () {
+    console.log((46 + 2) % width)
     for (let i = 0; i < (width * width); i++) {
       const rowOfFOur = [i, i + 1, i + 2, i + 3]
       const colorCheck = colorArr[i]
-      const skipCheck = []
-      if (i + 1 % width === 0) {
-        skipCheck.push(i - 1)
-        skipCheck.push(i - 2)
-        skipCheck.push(i - 3)
+      const skipCheckFour = []
+      if ((i + 1) % width === 0 || (i + 2) % width === 0 || (i + 3) % width === 0) {
+        skipCheckFour.push(i)
       }
-      console.log(skipCheck)
-      if (!skipCheck.includes(i)) continue
-
-      if (rowOfFOur.every(item => colorArr[item] === colorCheck)) {
-        return rowOfFOur.map(item => colorArr[item] = '')
+      if (skipCheckFour.includes(i) === false) {
+        if (rowOfFOur.every(item => colorArr[item] === colorCheck)) {
+          (
+            rowOfFOur.map(item => {
+              colorArr[item] = ''
+            })
+          )
+        }
       }
     }
   }
@@ -52,16 +63,19 @@ export default function Board () {
       const rowOfThree = [i, i + 1, i + 2]
       const colorCheck = colorArr[i]
       const skipCheck = []
-      if (i + 1 % width === 0) {
-        skipCheck.push(i - 1)
-        skipCheck.push(i - 2)
+      if ((i + 1) % width === 0 || (i + 2) % width === 0) {
+        skipCheck.push(i)
       }
-      console.log(skipCheck)
+      // console.log(skipCheck)
 
-      if (skipCheck.includes(i)) continue
-
-      if (rowOfThree.every(item => colorArr[item] === colorCheck)) {
-        return rowOfThree.map(item => colorArr[item] = '')
+      if (skipCheck.includes(i) === false) {
+        if (rowOfThree.every(item => colorArr[item] === colorCheck)) {
+          (
+            rowOfThree.map(item => {
+              colorArr[item] = ''
+            })
+          )
+        }
       }
     }
   }
@@ -86,7 +100,7 @@ export default function Board () {
       checkforRowThree()
       checkforColThree()
       setColorArr([...colorArr])
-    }, 100)
+    }, 5000)
     return () => clearInterval(timer)
   }, [checkforColFour, checkforRowFour, checkforRowThree, checkforColThree, colorArr])
 
