@@ -35,7 +35,7 @@ export default function Board () {
   }
 
   function checkforRowFour () {
-    console.log((46 + 2) % width)
+    // console.log((46 + 2) % width)
     for (let i = 0; i < (width * width); i++) {
       const rowOfFOur = [i, i + 1, i + 2, i + 3]
       const colorCheck = colorArr[i]
@@ -102,20 +102,27 @@ export default function Board () {
     colorArr[itemDraggedId] = replacedItem.style.backgroundColor
 
     const validMoves = [
+      itemDraggedId - width,
       itemDraggedId - 1,
       itemDraggedId + 1,
-      itemDraggedId - width,
       itemDraggedId + width
     ]
 
     const validMove = validMoves.includes(itemReplacedId)
+
+    console.log('Dragged ID:', itemDraggedId)
+    console.log('Replaced ID:', itemReplacedId)
+    console.log('Valid moves: ', validMoves)
+    console.log(validMove)
 
     const isARowOfFour = checkforRowFour()
     const isAColOfFour = checkforColFour()
     const isARowOfThree = checkforRowThree()
     const isAColOfThree = checkforColThree()
 
-    if (itemReplacedId && validMove && (isARowOfFour || isAColOfFour || isARowOfThree || isAColOfThree)) {
+    if (itemReplacedId &&
+      validMove &&
+      (isARowOfFour || isAColOfFour || isARowOfThree || isAColOfThree) === true) {
       setDraggedItem(null)
       setReplacedItem(null)
     } else {
