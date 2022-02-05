@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
 
+import blueCandy from './images/blue-candy.png'
+import greenCandy from './images/green-candy.png'
+import orangeCandy from './images/orange-candy.png'
+import redCandy from './images/red-candy.png'
+import yellowCandy from './images/yellow-candy.png'
+import purpleCandy from './images/purple-candy.png'
+import blank from './images/blank.png'
+
 export default function Board () {
   const [colorArr, setColorArr] = useState([])
   const [draggedItem, setDraggedItem] = useState(null)
@@ -7,7 +15,7 @@ export default function Board () {
   // const [replacedItem, setReplacedItem] = useState(null)
 
   const width = 8
-  const candyColors = ['blue', 'red', 'green', 'yellow', 'orange', 'purple']
+  const candyColors = [blueCandy, redCandy, greenCandy, yellowCandy, orangeCandy, purpleCandy]
 
   function checkforColFour () {
     for (let i = 0; i < (width * (width - 3)); i++) {
@@ -16,7 +24,7 @@ export default function Board () {
 
       if (colOfFour.every(item => colorArr[item] === colorCheck)) {
         // .map or ForEach?
-        (colOfFour.map(item => colorArr[item] = ''))
+        (colOfFour.map(item => colorArr[item] = blank))
         return true
       }
     }
@@ -28,7 +36,7 @@ export default function Board () {
       const colorCheck = colorArr[i]
 
       if (colOfThree.every(item => colorArr[item] === colorCheck)) {
-        (colOfThree.map(item => colorArr[item] = ''))
+        (colOfThree.map(item => colorArr[item] = blank))
         return true
       }
     }
@@ -45,7 +53,7 @@ export default function Board () {
       }
       if (skipCheckFour.includes(i) === false) {
         if (rowOfFOur.every(item => colorArr[item] === colorCheck)) {
-          (rowOfFOur.map(item => colorArr[item] = ''))
+          (rowOfFOur.map(item => colorArr[item] = blank))
           return true
         }
       }
@@ -62,7 +70,7 @@ export default function Board () {
       }
       if (skipCheck.includes(i) === false) {
         if (rowOfThree.every(item => colorArr[item] === colorCheck)) {
-          (rowOfThree.map(item => colorArr[item] = ''))
+          (rowOfThree.map(item => colorArr[item] = blank))
           return true
         }
       }
@@ -75,13 +83,13 @@ export default function Board () {
       const firstRow = Array.apply(null, Array(width)).map((x, i) => { return i })
       const checkFirstRow = firstRow.includes(i)
 
-      if (checkFirstRow && colorArr[i] === '') {
+      if (checkFirstRow && colorArr[i] === blank) {
         colorArr[i] = candyColors[Math.floor(Math.random() * candyColors.length)]
       }
 
-      if ((colorArr[i + width] === '')) {
+      if ((colorArr[i + width] === blank)) {
         colorArr[i + width] = colorArr[i]
-        colorArr[i] = ''
+        colorArr[i] = blank
       }
     }
   }
@@ -98,8 +106,8 @@ export default function Board () {
     // console.log(typeof itemReplacedId)
     // console.log(typeof itemDraggedId)
 
-    colorArr[itemReplacedId] = draggedItem.style.backgroundColor
-    colorArr[itemDraggedId] = replacedItem.style.backgroundColor
+    colorArr[itemReplacedId] = draggedItem.getAttribute('src')
+    colorArr[itemDraggedId] = replacedItem.getAttribute('src')
 
     const validMoves = [
       itemDraggedId - width,
@@ -120,14 +128,12 @@ export default function Board () {
     const isARowOfThree = checkforRowThree()
     const isAColOfThree = checkforColThree()
 
-    if (itemReplacedId &&
-      validMove &&
-      (isARowOfFour || isAColOfFour || isARowOfThree || isAColOfThree) === true) {
+    if (itemReplacedId && validMove && (isARowOfFour || isAColOfFour || isARowOfThree || isAColOfThree)) {
       setDraggedItem(null)
       setReplacedItem(null)
     } else {
-      colorArr[itemReplacedId] = replacedItem.style.backgroundColor
-      colorArr[itemDraggedId] = draggedItem.style.backgroundColor
+      colorArr[itemReplacedId] = replacedItem.getAttribute('src')
+      colorArr[itemDraggedId] = draggedItem.getAttribute('src')
       setColorArr([...colorArr])
     }
   }
@@ -160,10 +166,10 @@ export default function Board () {
   return (
     <div className='Board'>
       <div className='game'>
-        {colorArr.map((candy, index) => {
+        {colorArr.map((candyColor, index) => {
           return <img key={index}
-            style={{ backgroundColor: candy }}
-            alt={candy}
+            src={candyColor}
+            alt={candyColor}
             data-id={index}
             draggable='true'
             onDragOver={(e) => e.preventDefault()}
