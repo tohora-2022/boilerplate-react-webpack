@@ -12,7 +12,6 @@ export default function Board () {
   const [colorArr, setColorArr] = useState([])
   const [draggedItem, setDraggedItem] = useState(null)
   const [replacedItem, setReplacedItem] = useState(null)
-  // const [replacedItem, setReplacedItem] = useState(null)
 
   const width = 8
   const candyColors = [blueCandy, redCandy, greenCandy, yellowCandy, orangeCandy, purpleCandy]
@@ -77,7 +76,7 @@ export default function Board () {
     }
   }
 
-  function dropToEmptySpace () {
+  function newItemsToEmptySpace () {
     // const firstRow = Array.apply(null, Array(width)).map((x, i) => { return i })
     for (let i = 0; i < width * (width - 1); i++) {
       const firstRow = Array.apply(null, Array(width)).map((x, i) => { return i })
@@ -96,45 +95,60 @@ export default function Board () {
 
   function handleOnDragStart (e) {
     setDraggedItem(e.target)
+    // console.log('Dragged item: ', e.target)
+    // console.log('Dragged: ', draggedItem)
   }
+
   function handleOnDrop (e) {
     setReplacedItem(e.target)
+    // console.log('Dropped on item: ', e.target)
+    // console.log('Replaced: ', replacedItem)
   }
+
   function handleOnDragEnd (e) {
+    e.preventDefault()
+    // Getting dataIds of dragged and replaced items
     const itemDraggedId = parseInt(draggedItem.getAttribute('data-id'))
     const itemReplacedId = parseInt(replacedItem.getAttribute('data-id'))
     // console.log(typeof itemReplacedId)
     // console.log(typeof itemDraggedId)
-
-    colorArr[itemReplacedId] = draggedItem.getAttribute('src')
-    colorArr[itemDraggedId] = replacedItem.getAttribute('src')
-
     const validMoves = [
       itemDraggedId - width,
       itemDraggedId - 1,
       itemDraggedId + 1,
       itemDraggedId + width
     ]
-
     const validMove = validMoves.includes(itemReplacedId)
 
-    console.log('Dragged ID:', itemDraggedId)
-    console.log('Replaced ID:', itemReplacedId)
-    console.log('Valid moves: ', validMoves)
-    console.log(validMove)
+    colorArr[itemReplacedId] = draggedItem.getAttribute('src')
+    colorArr[itemDraggedId] = replacedItem.getAttribute('src')
 
-    const isARowOfFour = checkforRowFour()
-    const isAColOfFour = checkforColFour()
-    const isARowOfThree = checkforRowThree()
-    const isAColOfThree = checkforColThree()
+    // console.log('Dragged ID:', itemDraggedId)
+    // console.log('Replaced ID:', itemReplacedId)
+    // console.log('Valid moves: ', validMoves)
+    // console.log(validMove)
 
-    if (itemReplacedId && validMove && (isARowOfFour || isAColOfFour || isARowOfThree || isAColOfThree)) {
-      setDraggedItem(null)
-      setReplacedItem(null)
-    } else {
-      colorArr[itemReplacedId] = replacedItem.getAttribute('src')
-      colorArr[itemDraggedId] = draggedItem.getAttribute('src')
-      setColorArr([...colorArr])
+    // const [colorArr, setColorArr] = useState([])
+    // const [draggedItem, setDraggedItem] = useState(null)
+    // const [replacedItem, setReplacedItem] = useState(null)
+    if (validMove) {
+      // console.log(validMoves)
+      console.log('item:', itemReplacedId)
+      const isARowOfFour = checkforRowFour()
+      const isAColOfFour = checkforColFour()
+      const isARowOfThree = checkforRowThree()
+      const isAColOfThree = checkforColThree()
+
+      if (itemReplacedId && (isARowOfFour || isAColOfFour || isARowOfThree || isAColOfThree)) {
+      // console.log('if: ', itemReplacedId && validMove && (isARowOfFour || isAColOfFour || isARowOfThree || isAColOfThree))
+        setDraggedItem(null)
+        setReplacedItem(null)
+      } else {
+        colorArr[itemReplacedId] = replacedItem.getAttribute('src')
+        colorArr[itemDraggedId] = draggedItem.getAttribute('src')
+        setColorArr([...colorArr])
+      // console.log('else: ')
+      }
     }
   }
 
@@ -157,12 +171,13 @@ export default function Board () {
       checkforColFour()
       checkforRowThree()
       checkforColThree()
-      dropToEmptySpace()
+      newItemsToEmptySpace()
       setColorArr([...colorArr])
     }, 100)
     return () => clearInterval(timer)
-  }, [checkforColFour, checkforRowFour, checkforRowThree, checkforColThree, dropToEmptySpace, colorArr])
+  }, [checkforColFour, checkforRowFour, checkforRowThree, checkforColThree, newItemsToEmptySpace, colorArr])
 
+  // checkforColFour, checkforRowFour, checkforRowThree, checkforColThree, dropToEmptySpace, colorArr
   return (
     <div className='Board'>
       <div className='game'>
